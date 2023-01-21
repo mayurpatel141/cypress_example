@@ -28,9 +28,6 @@ jobs:
         with:
           runTests: false
 
-      - name: Start the server 🚀
-        run: npm start &
-
       - name: Run smoke tests
         if: ${{ github.event.inputs.smoke == 'true' }}
         uses: cypress-io/github-action@v2
