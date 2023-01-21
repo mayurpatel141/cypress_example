@@ -1,0 +1,46 @@
+name: tagged
+on:
+  workflow_dispatch:
+    inputs:
+      # these inputs will be shown to the user on GitHub Actions page
+      # and the user can simply check off the tags to run
+      sanity:
+        description: Run the tests tagged "@smoke"
+        required: false
+        type: boolean
+      adding:
+        description: Run the tests tagged "@adding"
+        required: false
+        type: boolean
+
+
+jobs:
+  tagged:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v2
+
+      # install dependencies and start the server
+      # https://github.com/cypress-io/github-action
+      - name: Install dependencies 📦
+        uses: cypress-io/github-action@v2
+        with:
+          runTests: false
+
+      - name: Start the server 🚀
+        run: npm start &
+
+      - name: Run smoke tests
+        if: ${{ github.event.inputs.smoke == 'true' }}
+        uses: cypress-io/github-action@v2
+        with:
+          install: false
+          env: grepTags=@smoke
+
+      - name: Run adding tests
+        if: ${{ github.event.inputs.adding == 'true' }}
+        uses: cypress-io/github-action@v2
+        with:
+          install: false
+          env: grepTags=@adding
