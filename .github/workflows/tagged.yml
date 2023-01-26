@@ -34,6 +34,7 @@ jobs:
         with:
           install: false
           env: grepTags=@smoke
+          run: npx cypress run  
 
       - name: Run adding tests
         if: ${{ github.event.inputs.adding == 'true' }}
